@@ -21,11 +21,11 @@ We used the AVD dataset which can be found [here](https://www.cs.unc.edu/~ammira
 Support for Matterport3D is coming soon.
 
 
-### Trainng
+### MapNet Module
 ...
 
 
-### Testing
+### Navigation Module
 ...
 
 
