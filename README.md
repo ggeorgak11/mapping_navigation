@@ -23,11 +23,10 @@ Support for Matterport3D is coming soon.
 
 
 ### MapNet Module
-...
-
+The implementation follows the module described in "Henriques et al, MapNet: An Allocentric Spatial Memory for Mapping Environments" along with our own extensions. Run the train_MapNet.py and test_MapNet.py directly for training and testing respectively. Make sure to edit the parameters.py under the ParametersMapNet class first. 
 
 ### Navigation Module
-...
+The implementation is tailored for imitation learning. The model definition can be found in IL_Net.py. Run train_NavNet.py and test_NavNet.py for training and testing after editing the appropriate parameters in the Parameters_IL class.
 
 
 ### Citation
