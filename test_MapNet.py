@@ -41,7 +41,7 @@ def evaluate_MapNet(par, test_iter, test_ids, test_data):
     with torch.no_grad():
         # Load the model
         test_model = hl.load_model(model_dir=par.model_dir, model_name="MapNet", test_iter=test_iter)
-        episode_results = {} # store predictions and ground-truth in order to visualize
+        episode_results, episode_count = {}, 0 # store predictions and ground-truth in order to visualize
         error_list=[]
         angle_acc = 0
         for i in test_ids:
@@ -87,12 +87,13 @@ def evaluate_MapNet(par, test_iter, test_ids, test_data):
                 # store predictions and gt
                 pred_pose[s+1, :] = np.array([x_pred, z_pred, pose_gt_batch[0,s,2]], dtype=np.float32)
             
-            episode_results[i] = (imgs_name, pose_gt_seq, abs_pose_gt_seq, pred_pose, scene, scale)
+            episode_results[episode_count] = (imgs_name, pose_gt_seq, abs_pose_gt_seq, pred_pose, scene, scale)
+            episode_count+=1
 
             episode_error = np.asarray(episode_error) 
             error_list.append( np.median(episode_error) )
 
-        with open(par.model_dir+'episode_results_'+str(test_iter)+'.pkl', 'wb') as f:    
+        with open(par.model_dir+'episode_results_eval_'+str(test_iter)+'.pkl', 'wb') as f:    
             pickle.dump(episode_results, f)
     
         error_list = np.asarray(error_list)
@@ -103,6 +104,6 @@ def evaluate_MapNet(par, test_iter, test_ids, test_data):
 if __name__ == '__main__':
     par = ParametersMapNet()
     print("Loading the test data...")
-    avd_test = AVD(par, seq_len=par.seq_len, nEpisodes=50, scene_list=par.test_scene_list, action_list=par.action_list)    
+    avd_test = AVD(par, seq_len=par.seq_len, nEpisodes=10, scene_list=par.test_scene_list, action_list=par.action_list)    
     test_ids = list(range(len(avd_test)))
     evaluate_MapNet(par, test_iter=par.test_iter, test_ids=test_ids, test_data=avd_test)

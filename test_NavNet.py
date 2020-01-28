@@ -40,7 +40,7 @@ def evaluate_NavNet(parIL, parMapNet, mapNet, ego_encoder, test_iter, test_ids, 
     with torch.no_grad():
         policy_net = hl.load_model(model_dir=parIL.model_dir, model_name="ILNet", test_iter=test_iter)
         acc, epi_length, path_ratio = 0, 0, 0
-        episode_results = {} # store predictions
+        episode_results, episode_count = {}, 0 # store predictions
         for i in test_ids:
             test_ex = test_data[i]
             # Get all info for the starting position
@@ -136,7 +136,8 @@ def evaluate_NavNet(parIL, parMapNet, mapNet, ego_encoder, test_iter, test_ids, 
                     else:
                         state = (state[0], state[1], state[2], torch.tensor([collision], dtype=torch.float32).cuda())
                 
-            episode_results[i] = (image_seq, action_seq, target_lbl, done) 
+            episode_results[episode_count] = (image_seq, action_seq, parIL.lbl_to_cat[target_lbl], done)
+            episode_count+=1
         # store the episodes
         episode_results_path = parIL.model_dir+'episode_results_eval_'+str(test_iter)+'.pkl'
         with open(episode_results_path, 'wb') as f:
