@@ -23,11 +23,22 @@ Support for Matterport3D is coming soon.
 
 
 ### MapNet Module
-The implementation follows the module described in "Henriques et al, MapNet: An Allocentric Spatial Memory for Mapping Environments" along with our own extensions. Run the train_MapNet.py and test_MapNet.py directly for training and testing respectively. Make sure to edit the parameters.py under the ParametersMapNet class first. 
+The implementation follows the module described in "Henriques et al, MapNet: An Allocentric Spatial Memory for Mapping Environments" along with our own extensions. Run the `train_MapNet.py` and `test_MapNet.py` directly for training and testing respectively. Make sure to edit the `parameters.py` under the ParametersMapNet class first. 
 
 ### Navigation Module
-The implementation is tailored for imitation learning. The model definition can be found in IL_Net.py. Run train_NavNet.py and test_NavNet.py for training and testing after editing the appropriate parameters in the Parameters_IL class.
+The implementation is tailored for imitation learning. The model definition can be found in `IL_Net.py`. Run `train_NavNet.py` and `test_NavNet.py` for training and testing after editing the appropriate parameters in the Parameters_IL class.
 
+### Visualizations
+Use the following for visualizing any results:
+```shell
+python visualize_episodes.py \
+  --avd_root=".../ActiveVisionDataset/" \
+  --episode_results_file=".../episode_results_eval_0.pkl" \
+  --scene="Home_001_1" \
+  --save_path=".../examples/" \
+  --mode="nav"
+```
+The script requires installing the python `plyfile` module in order to read the point clouds in AVD provided in `.ply` format. Also make sure that each scene folder contains the appropriate `dense_reconstruction.ply` provided with the rest of the AVD dataset. The `episode_results.pkl` files can be created by running `test_NavNet.py` or `test_MapNet.py` for generating results for navigation and localization respectively.
 
 ### Citation
 If you use this code for your research, please consider citing:
