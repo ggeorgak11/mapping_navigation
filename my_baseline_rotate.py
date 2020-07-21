@@ -16,6 +16,9 @@ from io import StringIO
 import png
 from statistics import mean
 
+AVD_dir = '/Users/yimengli/work/cognitive_planning_original/AVD_Minimal'
+saved_folder = '/Users/yimengli/work/cognitive_planning_original/baseline_rotate'
+
 np.set_printoptions(precision=2, suppress=True)
 np.random.seed(0)
 
@@ -23,7 +26,6 @@ TEST_WORLDS = ['Home_011_1', 'Home_013_1', 'Home_016_1']
 SUPPORTED_ACTIONS = ['right', 'rotate_cw', 'rotate_ccw', 'forward', 'left', 'backward', 'stop']
 _Graph = collections.namedtuple('_Graph', ['graph', 'id_to_index', 'index_to_id'])
 detection_thresh = 0.9
-saved_folder = '/Users/yimengli/work/cognitive_planning_original/baseline_rotate'
 
 def minus_theta_fn(previous_theta, current_theta):
   result = current_theta - previous_theta
@@ -48,7 +50,7 @@ def cameraPose2currentPose (current_img_id, camera_pose):
 
 def readDepthImage (current_world, current_img_id, resolution=224):
   img_id = current_img_id[:-1]+'3'
-  reader = png.Reader('/Users/yimengli/work/cognitive_planning_original/AVD_Minimal/{}/high_res_depth/{}.png'.format(current_world, img_id))
+  reader = png.Reader('{}/{}/high_res_depth/{}.png'.format(AVD_dir, current_world, img_id))
   data = reader.asDirect()
   pixels = data[2]
   image = []
@@ -308,7 +310,7 @@ class ActiveVisionDatasetEnv():
 for world_id in range(len(TEST_WORLDS)):
   #world_id = 0
   current_world = TEST_WORLDS[world_id]
-  dataset_root = '/Users/yimengli/work/cognitive_planning_original/AVD_Minimal'
+  dataset_root = AVD_dir
   _MAX_DEPTH_VALUE = 12102
   target_category_list = ['tv', 'dining_table', 'fridge', 'microwave', 'couch']
   mapper_cat2index = {'tv': 72, 'dining_table': 67, 'fridge': 82, 'microwave': 78, 'couch': 63}
@@ -339,7 +341,7 @@ for world_id in range(len(TEST_WORLDS)):
   ## initialize the graph map
   AVD = ActiveVisionDatasetEnv(current_world_image_ids, current_world, dataset_root)
   ## load true thetas
-  scene_path = '/Users/yimengli/work/cognitive_planning_original/AVD_Minimal/{}'.format(current_world)
+  scene_path = '{}/{}'.format(AVD_dir, current_world)
   image_structs_path = os.path.join(scene_path,'image_structs.mat')
   image_structs = sio.loadmat(image_structs_path)
   image_structs = image_structs['image_structs']
